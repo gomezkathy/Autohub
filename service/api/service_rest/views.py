@@ -19,6 +19,7 @@ class TechnicianEncoder(ModelEncoder):
 
 
 
+
 class AppointmentEncoder(ModelEncoder):
     model = Appointment
     properties = [
@@ -30,10 +31,11 @@ class AppointmentEncoder(ModelEncoder):
         "technician",
         "id",
     ]
+    def get_extra_data(self, o):
+        return {
+            "technician": o.technician.id
+        }
 
-    encoders = {
-        "technician": TechnicianEncoder
-    }
 
 class AutomobileVOEncoder(ModelEncoder):
     model = AutomobileVO
@@ -129,3 +131,49 @@ def api_technician_detail(request,pk):
             )
             response.status_code = 404
             return response
+
+@require_http_methods(["GET", "POST"])
+def api_appointment_list(request, technician_id=None):
+    if request.method == "GET":
+        if technician_id is not None:
+            appointments = Appointment.objects.filter(technician=technician_id)
+        else:
+            appointments = Appointment.objects.all()
+        return JsonResponse(
+            {'appointments': appointments},
+            encoder=AppointmentEncoder
+        )
+    else:
+        content = json.loads(request.body)
+
+
+@require_http_methods(["GET", "POST"])
+def api_appointment_list(request, technician_id=None):
+    if request.method == "GET":
+        if technician_id is not None:
+            appointment= Appointment.objects.filter(technician=technician_id)
+        else:
+            appointment = Appointment.objects.all()
+        return JsonResponse(
+            {"appointments": appointment},
+            encoder=AppointmentEncoder,
+        )
+    elif request.method == "POST":
+        content = json.loads(request.body)
+
+        try:
+            technician_href = content["technician"]
+            technician=Technician.objects.get(id=technician_href)
+            content["technician"]=technician
+        except Technician.DoesNotExist:
+            return JsonResponse(
+                {"message": "technician id is invalid"},
+                status=400,
+            )
+
+        appointment=Appointment.objects.create(**content)
+        return JsonResponse(
+            appointment,
+            encoder=AppointmentEncoder,
+            safe=False,
+        )

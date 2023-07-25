@@ -22,15 +22,15 @@ def poll(repeat=True):
             # Write your polling logic, here
             # Do not copy entire file
 
-            response = requests.get('http://inventory-api:8000/api/automobiles/')
+            response = requests.get('http://project-beta-inventory-api-1:8000')
             content = json.loads(response.content)
 
-            for automobile in content["auto"]:
-                AutomobileVO.objects.update_or_create(
+            for automobile in content["autos"]:
+                AutomobileVO.objects.get_or_create(
                     import_href=automobile["href"],
                     defaults ={
                         "color":automobile["color"],
-                        "year": automobile["color"],
+                        "year": automobile["year"],
                         "vin": automobile["vin"],
                     }
 
