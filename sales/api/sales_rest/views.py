@@ -7,7 +7,11 @@ from .models import AutomobileVO, Customer, Salesperson, Sale
 
 class AutomobileVOEncoder(ModelEncoder):
     model = AutomobileVO
-    properties = ["import_href"]
+    properties = [
+        "import_href",
+        "vin",
+        "sold",
+    ]
 
 
 class CustomerEncoder(ModelEncoder):
@@ -34,9 +38,17 @@ class SalespersonEncoder(ModelEncoder):
 class SaleEncoder(ModelEncoder):
     model = Sale
     properties = [
+        "id",
         "price",
-        # link foreign keys?
+        "salesperson",
+        "customer",
+        "automobile",
     ]
+    encoders = {
+        "salesperson": SalespersonEncoder(),
+        "customer": CustomerEncoder(),
+        "automobile": AutomobileVOEncoder(),
+    }
 
 
 @require_http_methods(["GET", "POST"])
@@ -77,17 +89,17 @@ def api_show_customer(request, pk):
 @require_http_methods(["GET", "POST"])
 def api_list_salespeople(request):
     if request.method == "GET":
-        customers = Salesperson.objects.all()
+        salespeople = Salesperson.objects.all()
         return JsonResponse(
-            {"salespeople": customers},
+            {"salespeople": salespeople},
             encoder=SalespersonEncoder,
         )
     else:  # "POST"
         try:
             content = json.loads(request.body)
-            customer = Salesperson.objects.create(**content)
+            salesperson = Salesperson.objects.create(**content)
             return JsonResponse(
-                customer,
+                salesperson,
                 encoder=SalespersonEncoder,
                 safe=False,
             )
@@ -107,3 +119,28 @@ def api_show_salesperson(request, pk):
             return JsonResponse({"deleted": count > 0})
         except Salesperson.DoesNotExist:
             return JsonResponse({"message": "Does not exist"})
+
+
+@require_http_methods(["GET", "POST"])
+def api_list_sales(request):
+    if request.method == "GET":
+        sales = Sale.objects.all()
+        return JsonResponse(
+            {"sales": sales},
+            encoder=SaleEncoder,
+        )
+    else:  # "POST"
+        try:
+            content = json.loads(request.body)
+            sale = Sale.objects.create(**content)
+            return JsonResponse(
+                sale,
+                encoder=SaleEncoder,
+                safe=False,
+            )
+        except:
+            response = JsonResponse(
+                {"message": "Could not create the sale"}
+            )
+            response.status_code = 400
+            return response
