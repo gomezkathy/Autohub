@@ -230,7 +230,7 @@ def api_cancel_appt(request,pk):
             return response
 
 
-
+#finishes appointment
 @require_http_methods(["PUT"])
 def api_finish_appt(request,pk):
     if request.method == "PUT":
