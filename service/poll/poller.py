@@ -28,8 +28,8 @@ def poll(repeat=True):
             for automobile in content["autos"]:
                 AutomobileVO.objects.update_or_create(
                     import_href=automobile["href"],
-                    defaults ={
-                        "color":automobile["color"],
+                    defaults={
+                        "color": automobile["color"],
                         "year": automobile["year"],
                         "vin": automobile["vin"],
                     }

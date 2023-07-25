@@ -29,7 +29,7 @@ class Customer(models.Model):
 
 class AutomobileVO(models.Model):
     vin = models.CharField(max_length=17, unique=True)
-    sold = models.BooleanField(default=False)
+    sold = models.BooleanField()
     import_href = models.CharField(max_length=200, unique=True, null=True)
 
 
@@ -50,3 +50,6 @@ class Sale(models.Model):
         related_name="sales",
         on_delete=models.CASCADE,
     )
+
+    def get_api_url(self):
+        return reverse("api_list_sales", kwargs={"pk": self.pk})
