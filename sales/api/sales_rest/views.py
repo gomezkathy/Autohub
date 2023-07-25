@@ -8,6 +8,7 @@ from .models import AutomobileVO, Customer, Salesperson, Sale
 class AutomobileVOEncoder(ModelEncoder):
     model = AutomobileVO
     properties = [
+        "id",
         "import_href",
         "vin",
         "sold",
@@ -130,17 +131,47 @@ def api_list_sales(request):
             encoder=SaleEncoder,
         )
     else:  # "POST"
+        content = json.loads(request.body)
         try:
-            content = json.loads(request.body)
-            sale = Sale.objects.create(**content)
-            return JsonResponse(
-                sale,
-                encoder=SaleEncoder,
-                safe=False,
-            )
-        except:
+            customer = Customer.objects.get(id=content["customer"])
+            content["customer"] = customer
+        except Customer.DoesNotExist:
             response = JsonResponse(
-                {"message": "Could not create the sale"}
+                {"message": "Customer does not exist"}
             )
             response.status_code = 400
             return response
+        try:
+            salesperson = Salesperson.objects.get(id=content["salesperson"])
+            content["salesperson"] = salesperson
+        except Salesperson.DoesNotExist:
+            response = JsonResponse(
+                {"message": "Salesperson does not exist"}
+            )
+            response.status_code = 400
+            return response
+        try:
+            automobile = AutomobileVO.objects.get(id=content["automobile"])
+            content["automobile"] = automobile
+        except AutomobileVO.DoesNotExist:
+            response = JsonResponse(
+                {"message": "Automobile does not exist"}
+            )
+            response.status_code = 400
+            return response
+        sale = Sale.objects.create(**content)
+        return JsonResponse(
+            sale,
+            encoder=SaleEncoder,
+            safe=False,
+        )
+
+
+@require_http_methods(["DELETE"])
+def api_show_sale(request, pk):
+    if request.method == "DELETE":
+        try:
+            count, _ = Sale.objects.filter(id=pk).delete()
+            return JsonResponse({"deleted": count > 0})
+        except Sale.DoesNotExist:
+            return JsonResponse({"message": "Does not exist"})

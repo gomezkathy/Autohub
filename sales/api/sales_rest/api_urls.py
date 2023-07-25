@@ -6,6 +6,7 @@ from .views import (
     api_list_salespeople,
     api_show_salesperson,
     api_list_sales,
+    api_show_sale,
 )
 
 urlpatterns = [
@@ -33,5 +34,10 @@ urlpatterns = [
         "sales/",
         api_list_sales,
         name="api_list_sales"
+    ),
+    path(
+        "sales/<int:pk>/",
+        api_show_sale,
+        name="api_show_sale"
     ),
 ]

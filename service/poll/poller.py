@@ -30,7 +30,7 @@ def poll(repeat=True):
                     import_href=automobile["href"],
                     defaults={
                         "color": automobile["color"],
-                        "year": automobile["color"],
+                        "year": automobile["year"],
                         "vin": automobile["vin"],
                     }
 
