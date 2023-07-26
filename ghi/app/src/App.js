@@ -4,7 +4,11 @@ import MainPage from './MainPage';
 import Nav from './Nav';
 import ManufacturersList from './ManufacturersList';
 import AddManufacturerForm from './ManufacturerForm';
+import SalespeopleList from './SalespeopleList';
+import AddSalespeopleForm from './SalespersonForm';
+import CustomersList from './CustomersList';
 import TechnicianForm from './TechnicianForm';
+import AddCustomerForm from './CustomerForm';
 
 
 function App() {
@@ -33,7 +37,6 @@ function App() {
     if (response.ok) {
       const { manufacturers } = await response.json();
       setManufacturers(manufacturers);
-      // console.log(manufacturers)
     } else {
       console.error('An error occurred fetching the manufacturer data')
     }
@@ -66,7 +69,7 @@ function App() {
     if (response.ok) {
       const { salespeople } = await response.json();
       setSalespeople(salespeople);
-      // console.log(salespeople)
+      console.log(salespeople)
     } else {
       console.error('An error occurred fetching the salespeople data')
     }
@@ -77,7 +80,6 @@ function App() {
     if (response.ok) {
       const { customers } = await response.json();
       setCustomers(customers);
-      // console.log(customers)
     } else {
       console.error('An error occurred fetching the customer data')
     }
@@ -111,15 +113,19 @@ function App() {
           <Route path="/" element={<MainPage />} />
           <Route path="manufacturers">
             <Route index element={<ManufacturersList manufacturers={manufacturers} getManufacturers={getManufacturers}/>} />
-            <Route path="new" element={<AddManufacturerForm getManufacturers={getManufacturers}/>} />
+            <Route path="create" element={<AddManufacturerForm getManufacturers={getManufacturers}/>} />
           </Route>
           <Route path="models">
           </Route>
           <Route path="automobiles">
           </Route>
           <Route path="salespeople">
+            <Route index element={<SalespeopleList salespeople={salespeople} getSalespeople={getSalespeople}/>} />
+            <Route path="create" element={<AddSalespeopleForm getSalespeople={getSalespeople}/>} />
           </Route>
           <Route path="customers">
+            <Route index element={<CustomersList customers={customers} getCustomers={getCustomers}/>} />
+            <Route path="create" element={<AddCustomerForm getCustomers={getCustomers}/>} />
           </Route>
           <Route path="sales">
           </Route>
