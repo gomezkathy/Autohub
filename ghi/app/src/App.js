@@ -5,6 +5,7 @@ import Nav from './Nav';
 import ManufacturersList from './ManufacturersList';
 import AddManufacturerForm from './ManufacturerForm';
 import TechnicianForm from './TechnicianForm';
+import TechnicianList from './TechnicianList';
 
 
 function App() {
@@ -18,7 +19,7 @@ function App() {
   const[ technicians, setTechnicians]  = useState([]);
 
   async function getTechnicians () {
-    const response = await fetch('http://localhost:8100/api/automobiles/');
+    const response = await fetch('http://localhost:8080/api/technicians/');
 
     if (response.ok) {
       const { technicians } = await response.json();
@@ -101,6 +102,8 @@ function App() {
     getSalespeople();
     getCustomers();
     getSales();
+    getTechnicians();
+
   }, [])
 
   return (
@@ -123,7 +126,10 @@ function App() {
           </Route>
           <Route path="sales">
           </Route>
-          <Route path='/technicians/new' element={<TechnicianForm />} ></Route>
+          <Route path="technicians">
+            <Route index element={<TechnicianList technicians={technicians} getTechnicians={getTechnicians} />}/>
+            <Route path="new" element={<TechnicianForm getTechnicians={getTechnicians} />} />
+          </Route>
         </Routes>
       </div>
     </BrowserRouter>

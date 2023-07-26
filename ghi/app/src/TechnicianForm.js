@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 function TechnicianForm({getTechnicians, technicians}) {
     const[firstName, setFirstName] = useState('');
