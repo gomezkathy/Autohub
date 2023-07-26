@@ -24,6 +24,7 @@ function App() {
       console.error ('error occured fetch technician data');
     }
   }
+
   async function getManufacturers() {
     const response = await fetch('http://localhost:8100/api/manufacturers/')
     if (response.ok) {
