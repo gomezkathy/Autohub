@@ -7,6 +7,11 @@ import TechnicianForm from './TechnicianForm';
 function App() {
 
   const [ manufacturers, setManufacturers ] = useState([]);
+  const [ models, setModels ] = useState([]);
+  const [ automobiles, setAutomobiles ] = useState([]);
+  const [ salespeople, setSalespeople ] = useState([]);
+  const [ customers, setCustomers ] = useState([]);
+  const [ sales, setSales ] = useState([]);
   const[ technicians, setTechnicians]  = useState([]);
 
   async function getTechnicians () {
@@ -19,9 +24,6 @@ function App() {
       console.error ('error occured fetch technician data');
     }
   }
-
-
-
   async function getManufacturers() {
     const response = await fetch('http://localhost:8100/api/manufacturers/')
     if (response.ok) {
