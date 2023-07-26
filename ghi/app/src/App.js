@@ -4,10 +4,23 @@ import MainPage from './MainPage';
 import Nav from './Nav';
 import TechnicianForm from './TechnicianForm';
 
-
 function App() {
 
   const [ manufacturers, setManufacturers ] = useState([]);
+  const[ technicians, setTechnicians]  = useState([]);
+
+  async function getTechnicians () {
+    const response = await fetch('http://localhost:8100/api/automobiles/');
+
+    if (response.ok) {
+      const { technicians } = await response.json();
+      setTechnicians(technicians);
+    } else {
+      console.error ('error occured fetch technician data');
+    }
+  }
+
+
 
   async function getManufacturers() {
     const response = await fetch('http://localhost:8100/api/manufacturers/')
@@ -22,6 +35,7 @@ function App() {
 
   useEffect(() => {
     getManufacturers();
+    getTechnicians();
   }, [])
 
   return (
@@ -42,7 +56,9 @@ function App() {
           </Route>
           <Route path="sales">
           </Route>
-          <Route path='/technicians/new' element={<TechnicianForm />} ></Route>
+          <Route path="technicians">
+            <Route path="new" element={<TechnicianForm technicians={technicians} getTechnicians={getTechnicians} />} />
+          </Route>
         </Routes>
       </div>
     </BrowserRouter>

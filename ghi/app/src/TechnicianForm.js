@@ -1,33 +1,32 @@
 import React, { useEffect, useState } from 'react';
 
-function TechnicianForm() {
-    const[values, setValues] = useState([]);
+function TechnicianForm({getTechnicians, technicians}) {
     const[firstName, setFirstName] = useState('');
     const[lastName, setLastName] = useState('');
     const[employeeID, setEmployee] = useState('');
 
-    const handleFirstNameChange = (event) => {
-        const value = event.target.value;
+    function handleFirstNameChange(event) {
+        const { value } = event.target;
         setFirstName(value);
     }
 
-    const handleLastNameChange = (event) => {
-        const value = event.target.value;
+    function handleLastNameChange(event) {
+        const { value } = event.target;
         setLastName(value);
     }
 
-    const handleEmployeeChange = (event) => {
-        const value = event.target.value;
+    function handleEmployeeChange(event) {
+        const { value } = event.target;
         setEmployee(value);
     }
 
-    const handleSubmit = async (event) => {
+    async function handleSubmit(event){
         event.preventDefault();
-        const data = {};
-
-        data.first_name = firstName;
-        data.last_name = lastName;
-        data.employee_id = employeeID;
+        const data = {
+            first_name: firstName,
+            last_name: lastName,
+            employee_id: employeeID,
+        };
 
         console.log(data);
 
@@ -48,26 +47,14 @@ function TechnicianForm() {
           setFirstName('');
           setLastName('');
           setEmployee('');
+          getTechnicians();
 
         }
 
     }
 
 
-    const fetchData = async () => {
-        const url = 'http://localhost:8100/api/automobiles/';
 
-        const response = await fetch(url);
-
-        if (response.ok) {
-          const data = await response.json();
-          setValues(data.values);
-        }
-      }
-
-      useEffect(() => {
-        fetchData();
-      }, []);
 
 
     return (
