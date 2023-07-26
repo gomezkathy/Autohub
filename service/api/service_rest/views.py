@@ -132,19 +132,7 @@ def api_technician_detail(request,pk):
             response.status_code = 404
             return response
 
-@require_http_methods(["GET", "POST"])
-def api_appointment_list(request, technician_id=None):
-    if request.method == "GET":
-        if technician_id is not None:
-            appointments = Appointment.objects.filter(technician=technician_id)
-        else:
-            appointments = Appointment.objects.all()
-        return JsonResponse(
-            {'appointments': appointments},
-            encoder=AppointmentEncoder
-        )
-    else:
-        content = json.loads(request.body)
+
 
 
 @require_http_methods(["GET", "POST"])
