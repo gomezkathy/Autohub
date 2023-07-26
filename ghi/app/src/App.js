@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import MainPage from './MainPage';
 import Nav from './Nav';
@@ -23,18 +23,8 @@ function App() {
   const [ salespeople, setSalespeople ] = useState([]);
   const [ customers, setCustomers ] = useState([]);
   const [ sales, setSales ] = useState([]);
-  const[ technicians, setTechnicians]  = useState([]);
 
-  async function getTechnicians () {
-    const response = await fetch('http://localhost:8100/api/automobiles/');
 
-    if (response.ok) {
-      const { technicians } = await response.json();
-      setTechnicians(technicians);
-    } else {
-      console.error ('error occured fetch technician data');
-    }
-  }
 
   async function getManufacturers() {
     const response = await fetch('http://localhost:8100/api/manufacturers/')
@@ -105,6 +95,7 @@ function App() {
     getSalespeople();
     getCustomers();
     getSales();
+
   }, [])
 
   return (
@@ -113,6 +104,7 @@ function App() {
       <div className="container">
         <Routes>
           <Route path="/" element={<MainPage />} />
+          <Route path='/technicians/new' element={<TechnicianForm />}></Route>
           <Route path="manufacturers">
             <Route index element={<ManufacturersList manufacturers={manufacturers} getManufacturers={getManufacturers}/>} />
             <Route path="create" element={<AddManufacturerForm getManufacturers={getManufacturers}/>} />
@@ -135,7 +127,6 @@ function App() {
           <Route path="sales">
             <Route index element={<SalesList sales={sales} getSales={getSales}/>} />
           </Route>
-          <Route path='/technicians/new' element={<TechnicianForm />} ></Route>
         </Routes>
       </div>
     </BrowserRouter>
