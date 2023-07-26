@@ -15,7 +15,18 @@ function App() {
   const [ salespeople, setSalespeople ] = useState([]);
   const [ customers, setCustomers ] = useState([]);
   const [ sales, setSales ] = useState([]);
+  const[ technicians, setTechnicians]  = useState([]);
 
+  async function getTechnicians () {
+    const response = await fetch('http://localhost:8100/api/automobiles/');
+
+    if (response.ok) {
+      const { technicians } = await response.json();
+      setTechnicians(technicians);
+    } else {
+      console.error ('error occured fetch technician data');
+    }
+  }
   async function getManufacturers() {
     const response = await fetch('http://localhost:8100/api/manufacturers/')
     if (response.ok) {
