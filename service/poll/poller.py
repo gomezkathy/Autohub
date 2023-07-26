@@ -22,7 +22,7 @@ def poll(repeat=True):
             # Write your polling logic, here
             # Do not copy entire file
 
-            response = requests.get('http://project-beta-inventory-api-1:8000')
+            response = requests.get('http://project-beta-inventory-api-1:8000/api/automobiles/')
             content = json.loads(response.content)
 
             for automobile in content["autos"]:
