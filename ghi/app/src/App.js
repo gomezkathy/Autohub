@@ -1,11 +1,10 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import MainPage from './MainPage';
 import Nav from './Nav';
 import ManufacturersList from './ManufacturersList';
 import AddManufacturerForm from './ManufacturerForm';
 import TechnicianForm from './TechnicianForm';
-import TechnicianList from './TechnicianList';
 
 
 function App() {
@@ -16,18 +15,8 @@ function App() {
   const [ salespeople, setSalespeople ] = useState([]);
   const [ customers, setCustomers ] = useState([]);
   const [ sales, setSales ] = useState([]);
-  const[ technicians, setTechnicians]  = useState([]);
 
-  async function getTechnicians () {
-    const response = await fetch('http://localhost:8080/api/technicians/');
 
-    if (response.ok) {
-      const { technicians } = await response.json();
-      setTechnicians(technicians);
-    } else {
-      console.error ('error occured fetch technician data');
-    }
-  }
 
   async function getManufacturers() {
     const response = await fetch('http://localhost:8100/api/manufacturers/')
@@ -102,7 +91,6 @@ function App() {
     getSalespeople();
     getCustomers();
     getSales();
-    getTechnicians();
 
   }, [])
 
@@ -112,6 +100,7 @@ function App() {
       <div className="container">
         <Routes>
           <Route path="/" element={<MainPage />} />
+          <Route path='/technicians/new' element={<TechnicianForm />}></Route>
           <Route path="manufacturers">
             <Route index element={<ManufacturersList manufacturers={manufacturers} getManufacturers={getManufacturers}/>} />
             <Route path="new" element={<AddManufacturerForm getManufacturers={getManufacturers}/>} />
@@ -125,10 +114,6 @@ function App() {
           <Route path="customers">
           </Route>
           <Route path="sales">
-          </Route>
-          <Route path="technicians">
-            <Route index element={<TechnicianList technicians={technicians} getTechnicians={getTechnicians} />}/>
-            <Route path="new" element={<TechnicianForm getTechnicians={getTechnicians} />} />
           </Route>
         </Routes>
       </div>
