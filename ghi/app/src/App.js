@@ -15,6 +15,8 @@ import TechnicianForm from './TechnicianForm';
 import AddCustomerForm from './CustomerForm';
 import TechnicianList from './TechnicianList';
 import AppointmentForm from './AppointmentForm';
+import AppointmentList from './AppointmentList';
+import ServiceHistory from './ServiceHistory';
 
 
 function App(props) {
@@ -25,8 +27,17 @@ function App(props) {
   const [ salespeople, setSalespeople ] = useState([]);
   const [ customers, setCustomers ] = useState([]);
   const [ sales, setSales ] = useState([]);
+  const [ appointments, setAppointments] = useState([]);
 
-
+  async function getAppointments() {
+    const response = await fetch('http://localhost:8080/api/appointments/');
+    if (response.ok) {
+      const { appointments } = await response.json();
+      setAppointments(appointments);
+    } else {
+      console.error('could not get appointment data');
+    }
+  }
 
   async function getManufacturers() {
     const response = await fetch('http://localhost:8100/api/manufacturers/')
@@ -97,11 +108,13 @@ function App(props) {
     getSalespeople();
     getCustomers();
     getSales();
+    getAppointments();
 
   }, [])
   if (props.technicians === undefined) {
     return null;
   }
+
   return (
     <BrowserRouter>
       <Nav />
@@ -113,7 +126,9 @@ function App(props) {
             <Route path="new" element={<TechnicianForm />} />
           </Route>
           <Route path="appointments">
+            <Route index element={<AppointmentList appointments={appointments} />} />
             <Route path="new" element={<AppointmentForm />} />
+            <Route path="history" element={<ServiceHistory />} />
           </Route>
           <Route path="manufacturers">
             <Route index element={<ManufacturersList manufacturers={manufacturers} getManufacturers={getManufacturers}/>} />
