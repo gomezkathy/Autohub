@@ -11,7 +11,7 @@ function AutomobilesList(props) {
             props.getAutomobiles();
         }
     }
-    if (props.models === undefined) { return null }
+    if (props.autos === undefined) { return null }
     return (
         <>
             <table className="table table-striped">
@@ -22,18 +22,20 @@ function AutomobilesList(props) {
                         <th>Year</th>
                         <th>Model</th>
                         <th>Manufacturer</th>
+                        <th>Sold</th>
                         <th>Delete?</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {props.automobiles.map(automobile => {
+                    {props.autos.map(automobile => {
                         return (
                             <tr key={automobile.id}>
                                 <td>{automobile.vin}</td>
                                 <td>{automobile.color}</td>
                                 <td>{automobile.year}</td>
                                 <td>{automobile.model.name}</td>
-                                <td>{automobile.manufacturer.name}</td>
+                                <td>{automobile.model.manufacturer.name}</td>
+                                <td>{String(automobile.sold)}</td>
                                 <td><button onClick={() => deleteAutomobile(automobile.id)}>Delete</button></td>
                             </tr>
                         )

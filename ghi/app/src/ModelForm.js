@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
-function AddModelForm({getModels}) {
-    const [ manufacturers, setManufacturers ] = useState([]);
+function AddModelForm({getModels, manufacturers}) {
+    // const [ manufacturers, setManufacturers ] = useState([]);
     const [hasAddedModel, setHasAddedModel] = useState(false);
     //Condense all form data into one state object
     const [formData, setFormData] = useState({
@@ -10,15 +10,15 @@ function AddModelForm({getModels}) {
         manufacturer_id: '',
     })
 
-    const fetchData = async () => {
-        const response = await fetch('http://localhost:8100/api/manufacturers/');
-        if (response.ok) {
-            const data = await response.json();
-            setManufacturers(data.manufacturers);
-        }
-    }
+    // const fetchData = async () => {
+    //     const response = await fetch('http://localhost:8100/api/manufacturers/');
+    //     if (response.ok) {
+    //         const data = await response.json();
+    //         setManufacturers(data.manufacturers);
+    //     }
+    // }
     
-    useEffect(() => {fetchData();}, []);
+    // useEffect(() => {fetchData();}, []);
 
     const handleSubmit = async (event) => {
         console.log(formData);
@@ -72,7 +72,7 @@ function AddModelForm({getModels}) {
       <div className="offset-3 col-6">
         <div className="shadow p-4 mt-4">
           <h1>Create a vehicle model</h1>
-          <form className={formClasses} onSubmit={handleSubmit} id="create-shoe-form">
+          <form className={formClasses} onSubmit={handleSubmit} id="create-model-form">
             <div className="form-floating mb-3">
               <input onChange={handleFormChange} placeholder="Model Name" required type="text" 
                 name="name" id="name" className="form-control" />

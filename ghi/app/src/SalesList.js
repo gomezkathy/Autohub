@@ -41,7 +41,7 @@ function SalesList(props) {
                 </tbody>
             </table>
           <div className="d-grid gap-2 d-sm-flex justify-content-sm-center">
-            <Link to="/models/create" className="btn btn-primary btn-lg px-4 gap-3">Add a Sale</Link>
+            <Link to="/sales/create" className="btn btn-primary btn-lg px-4 gap-3">Add a Sale</Link>
           </div>
         </>
     )

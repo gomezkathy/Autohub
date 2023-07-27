@@ -10,6 +10,7 @@ import AutomobilesList from './AutomobilesList';
 import SalespeopleList from './SalespeopleList';
 import AddSalespeopleForm from './SalespersonForm';
 import SalesList from './SalesList';
+import AddSaleForm from './SaleForm';
 import CustomersList from './CustomersList';
 import TechnicianForm from './TechnicianForm';
 import AddCustomerForm from './CustomerForm';
@@ -19,7 +20,7 @@ function App() {
 
   const [ manufacturers, setManufacturers ] = useState([]);
   const [ models, setModels ] = useState([]);
-  const [ automobiles, setAutomobiles ] = useState([]);
+  const [ autos, setAutomobiles ] = useState([]);
   const [ salespeople, setSalespeople ] = useState([]);
   const [ customers, setCustomers ] = useState([]);
   const [ sales, setSales ] = useState([]);
@@ -49,9 +50,9 @@ function App() {
   async function getAutomobiles() {
     const response = await fetch('http://localhost:8100/api/automobiles/')
     if (response.ok) {
-      const { automobiles } = await response.json();
-      setAutomobiles(automobiles);
-      // console.log(automobiles)
+      const { autos } = await response.json();
+      setAutomobiles(autos);
+      console.log(autos)
     } else {
       console.error('An error occurred fetching the automobiles data')
     }
@@ -82,7 +83,7 @@ function App() {
     if (response.ok) {
       const { sales } = await response.json();
       setSales(sales);
-      console.log(sales)
+      // console.log(sales)
     } else {
       console.error('An error occurred fetching the sales data')
     }
@@ -114,7 +115,7 @@ function App() {
             <Route path="create" element={<AddModelForm manufacturers={manufacturers} getModels={getModels} />} />
           </Route>
           <Route path="automobiles">
-            <Route index element={<AutomobilesList automobiles={automobiles} getAutomobiles={getAutomobiles}/>} />
+            <Route index element={<AutomobilesList autos={autos} getAutomobiles={getAutomobiles}/>} />
           </Route>
           <Route path="salespeople">
             <Route index element={<SalespeopleList salespeople={salespeople} getSalespeople={getSalespeople}/>} />
@@ -126,6 +127,7 @@ function App() {
           </Route>
           <Route path="sales">
             <Route index element={<SalesList sales={sales} getSales={getSales}/>} />
+            <Route path="create" element={<AddSaleForm autos={autos} customers={customers} salespeople={salespeople} getSales={getSales}/>} />
           </Route>
         </Routes>
       </div>
