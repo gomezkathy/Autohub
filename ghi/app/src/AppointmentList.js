@@ -15,6 +15,22 @@ function AppointmentList(props){
         }
     }
 
+    async function handleAppointmentFinish(appt_id) {
+        const apptUrl =`http://localhost:8080/api/appointments/${appt_id}/finish`;
+        const fetchConfig = {
+          method: 'put',
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        };
+
+        const response = await fetch(apptUrl, fetchConfig);
+        if (response.ok) {
+          console.log("finished");
+          window.location.reload();
+        }
+    }
+
 
 
     if (props.appointments === undefined){
@@ -48,6 +64,9 @@ function AppointmentList(props){
                             <td>{ appointment.reason }</td>
                             <td>
                             <button onClick={() => handleAppointmentCancel(appointment.id)} className="btn btn-danger">Cancel</button>
+                            </td>
+                            <td>
+                            <button onClick={() => handleAppointmentFinish(appointment.id)} className="btn btn-success">Finish</button>
                             </td>
                         </tr>
                     )
