@@ -10,7 +10,6 @@ function AddSalespeopleForm({getSalespeople}) {
     })
 
     const handleSubmit = async (event) => {
-        console.log(formData);
         event.preventDefault();
         const url = 'http://localhost:8090/api/salespeople/';
         const fetchConfig = {

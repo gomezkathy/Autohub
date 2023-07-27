@@ -11,6 +11,16 @@ function AddSaleForm({getSales, salespeople, customers, autos}) {
         price: '',
     })
 
+    async function updateSold() {
+        const updateAutoSoldURL = 'http://localhost:8100/api/automobiles/';
+        const fetchUpdateConfig = {
+            method: "put",
+            body: JSON.stringify({"sold": true}),
+            headers: {'Content-Type': 'application/json',},
+        }
+        const response = await fetch(updateAutoSoldURL, fetchUpdateConfig);
+    }
+
     const handleSubmit = async (event) => {
         console.log(formData);
         event.preventDefault();
@@ -29,6 +39,7 @@ function AddSaleForm({getSales, salespeople, customers, autos}) {
         const response = await fetch(url, fetchConfig);
     
         if (response.ok) {
+            // updateSold();
             //The single formData object allows for easier clearing of data
             setFormData({
                 automobile: '',

@@ -53,7 +53,6 @@ function App() {
     if (response.ok) {
       const { autos } = await response.json();
       setAutomobiles(autos);
-      console.log(autos)
     } else {
       console.error('An error occurred fetching the automobiles data')
     }
@@ -128,7 +127,7 @@ function App() {
             <Route path="create" element={<AddCustomerForm getCustomers={getCustomers}/>} />
           </Route>
           <Route path="sales">
-            <Route index element={<SalesList sales={sales} getSales={getSales}/>} />
+            <Route index element={<SalesList sales={sales} getSales={getSales} getAutomobiles={getAutomobiles}/>} />
             <Route path="create" element={<AddSaleForm autos={autos} customers={customers} salespeople={salespeople} getSales={getSales}/>} />
           </Route>
         </Routes>

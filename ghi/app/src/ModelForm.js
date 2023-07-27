@@ -11,7 +11,7 @@ function AddModelForm({getModels, manufacturers}) {
     })
 
     const handleSubmit = async (event) => {
-        console.log(formData);
+        // console.log(formData);
         event.preventDefault();
         const url = 'http://localhost:8100/api/models/';
         const fetchConfig = {

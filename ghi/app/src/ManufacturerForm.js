@@ -8,7 +8,6 @@ function AddManufacturerForm({getManufacturers}) {
     })
 
     const handleSubmit = async (event) => {
-        console.log(formData);
         event.preventDefault();
         const url = 'http://localhost:8100/api/manufacturers/';
         const fetchConfig = {

@@ -3,14 +3,27 @@ import { Link } from 'react-router-dom';
 
 function SalesList(props) {
 
-    async function deleteSale(saleID) {
+    async function deleteSale(saleID, autoVIN) {
+        //deletes the sale item
         const url = `http://localhost:8090/api/sales/${saleID}/`;
         const fetchConfig = { method: "DELETE", };
         const response = await fetch(url, fetchConfig);
-        if (response.ok) {
+
+        //toggles automobile sold status to false when sale is deleted
+        const updateAutoURL = `http://localhost:8100/api/automobiles/${autoVIN}/`;
+        const fetchUpdateConfig = { 
+            method: "PUT", 
+            body: JSON.stringify({"sold": false}),
+            headers: {'Content-Type': 'application/json',},
+        };
+        const response2 = await fetch(updateAutoURL, fetchUpdateConfig);
+
+        if (response.ok || response2.ok) {
             props.getSales();
+            props.getAutomobiles();
         }
     }
+
     if (props.sales === undefined) { return null }
     return (
         <>
@@ -34,7 +47,7 @@ function SalesList(props) {
                                 <td>{sale.customer.first_name} {sale.customer.last_name}</td>
                                 <td>{sale.automobile.vin}</td>
                                 <td>{sale.price}</td>
-                                <td><button onClick={() => deleteSale(sale.id)}>Delete</button></td>
+                                <td><button onClick={() => deleteSale(sale.id, sale.automobile.vin)}>Delete</button></td>
                             </tr>
                         )
                     })}

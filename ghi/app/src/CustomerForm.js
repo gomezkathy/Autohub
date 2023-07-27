@@ -11,7 +11,6 @@ function AddCustomerForm({getCustomers}) {
     })
 
     const handleSubmit = async (event) => {
-        console.log(formData);
         event.preventDefault();
         const url = 'http://localhost:8090/api/customers/';
         const fetchConfig = {
