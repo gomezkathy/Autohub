@@ -13,9 +13,10 @@ import SalesList from './SalesList';
 import CustomersList from './CustomersList';
 import TechnicianForm from './TechnicianForm';
 import AddCustomerForm from './CustomerForm';
+import TechnicianList from './TechnicianList';
 
 
-function App() {
+function App(props) {
 
   const [ manufacturers, setManufacturers ] = useState([]);
   const [ models, setModels ] = useState([]);
@@ -97,14 +98,19 @@ function App() {
     getSales();
 
   }, [])
-
+  if (props.technicians === undefined) {
+    return null;
+  }
   return (
     <BrowserRouter>
       <Nav />
       <div className="container">
         <Routes>
           <Route path="/" element={<MainPage />} />
-          <Route path='/technicians/new' element={<TechnicianForm />}></Route>
+          <Route path="technicians">
+            <Route index element={<TechnicianList technicians={props.technicians} />} />
+            <Route path="new" element={<TechnicianForm />} />
+          </Route>
           <Route path="manufacturers">
             <Route index element={<ManufacturersList manufacturers={manufacturers} getManufacturers={getManufacturers}/>} />
             <Route path="create" element={<AddManufacturerForm getManufacturers={getManufacturers}/>} />

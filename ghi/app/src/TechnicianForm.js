@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 
 function TechnicianForm () {
-  const [values, setValues] = useState([]);
+  const [technicians, setTechnicians] = useState([]);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [employeeID, setEmployeeID] = useState('');
@@ -60,7 +60,7 @@ function TechnicianForm () {
 
     if (response.ok) {
       const data = await response.json();
-      setValues(data.values);
+      setTechnicians(data.technicians);
 
     }
   }
