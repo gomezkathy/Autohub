@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
 
 
 function SalesList(props) {
@@ -23,10 +24,37 @@ function SalesList(props) {
             props.getAutomobiles();
         }
     }
+    
+    
+    const [formData, setFormData] = useState({
+        salesperson: '',
+    })
+    
+    const handleFormChange = (e) => {
+        const value = e.target.value;
+        const inputName = e.target.name;
+        setFormData({
+            //Spread/Copy previous form data into the new state object
+            ...formData,
+            //Then add the currently engaged input key and value
+            [inputName]: value
+        });
+        // console.log(formData);
+    }
 
     if (props.sales === undefined) { return null }
     return (
         <>
+            <select onChange={handleFormChange} required name="salesperson" id="salesperson" className="form-select">
+                <option value="">View sales of one salesperson...</option>
+                {props.salespeople.map(salesperson => {
+                  return (
+                    <option key={salesperson.id} value={salesperson.id}>
+                      {salesperson.first_name} {salesperson.last_name}
+                    </option>
+                  )
+                })}
+            </select>
             <table className="table table-striped">
                 <thead className="table-primary">
                     <tr>
@@ -39,7 +67,7 @@ function SalesList(props) {
                     </tr>
                 </thead>
                 <tbody>
-                    {props.sales.map(sale => {
+                    {props.sales.map(sale => { {
                         return (
                             <tr key={sale.id}>
                                 <td>{sale.salesperson.employee_id}</td>
@@ -49,7 +77,7 @@ function SalesList(props) {
                                 <td>{sale.price}</td>
                                 <td><button onClick={() => deleteSale(sale.id, sale.automobile.vin)}>Delete</button></td>
                             </tr>
-                        )
+                        )}
                     })}
                 </tbody>
             </table>
