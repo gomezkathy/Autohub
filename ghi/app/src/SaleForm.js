@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
-function AddSaleForm({getSales, salespeople, customers, autos}) {
+// function AddSaleForm({getAutomobiles, getSales, salespeople, customers, autos}) {
+function AddSaleForm(props) {
     const [hasAddedSale, setHasAddedSale] = useState(false);
     
     //Condense all form data into one state object
@@ -11,14 +12,17 @@ function AddSaleForm({getSales, salespeople, customers, autos}) {
         price: '',
     })
 
-    async function updateSold() {
-        const updateAutoSoldURL = 'http://localhost:8100/api/automobiles/';
+    async function updateSold(vin) {
+        const updateAutoSoldURL = 'http://localhost:8100/api/automobiles/' + String(vin) + '/';
         const fetchUpdateConfig = {
             method: "put",
             body: JSON.stringify({"sold": true}),
             headers: {'Content-Type': 'application/json',},
         }
-        const response = await fetch(updateAutoSoldURL, fetchUpdateConfig);
+        const response2 = await fetch(updateAutoSoldURL, fetchUpdateConfig);
+        // if (response2.ok) {
+        //     getAutomobiles();
+        // }
     }
 
     const handleSubmit = async (event) => {
@@ -35,11 +39,12 @@ function AddSaleForm({getSales, salespeople, customers, autos}) {
             },
         };
         
-        //ERROR: need to POST manufacturer_id:1 but sending manufacturer:1
         const response = await fetch(url, fetchConfig);
     
         if (response.ok) {
-            // updateSold();
+            const vin= formData["automobile"];
+            updateSold(vin);
+            
             //The single formData object allows for easier clearing of data
             setFormData({
                 automobile: '',
@@ -48,7 +53,8 @@ function AddSaleForm({getSales, salespeople, customers, autos}) {
                 price: '',
             });
             setHasAddedSale(true);
-            getSales();
+            props.getSales();
+            // props.getAutos();
         }
     }
     
@@ -74,24 +80,24 @@ function AddSaleForm({getSales, salespeople, customers, autos}) {
     <div className="row">
       <div className="offset-3 col-6">
         <div className="shadow p-4 mt-4">
-          <h1>Create a vehicle model</h1>
+          <h1>Record a new sale</h1>
           <form className={formClasses} onSubmit={handleSubmit} id="create-sale-form">
           <div className="mb-3">
               <select onChange={handleFormChange} required name="automobile" id="automobile" className="form-select">
                 <option value="">Choose an automobile VIN...</option>
-                {autos.map(automobile => {
+                {props.autos.map(automobile => { if(!automobile.sold){
                   return (
                     <option key={automobile.id} value={automobile.vin}>
                       {automobile.vin}
                     </option>
-                  )
+                  )}
                 })}
               </select>
             </div>
             <div className="mb-3">
               <select onChange={handleFormChange} required name="salesperson" id="salesperson" className="form-select">
                 <option value="">Choose a salesperson...</option>
-                {salespeople.map(salesperson => {
+                {props.salespeople.map(salesperson => {
                   return (
                     <option key={salesperson.id} value={salesperson.id}>
                       {salesperson.first_name} {salesperson.last_name}
@@ -103,7 +109,7 @@ function AddSaleForm({getSales, salespeople, customers, autos}) {
             <div className="mb-3">
               <select onChange={handleFormChange} required name="customer" id="customer" className="form-select">
                 <option value="">Choose a customer...</option>
-                {customers.map(customer => {
+                {props.customers.map(customer => {
                   return (
                     <option key={customer.id} value={customer.id}>
                       {customer.first_name} {customer.last_name}
