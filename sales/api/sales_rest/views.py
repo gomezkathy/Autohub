@@ -151,8 +151,10 @@ def api_list_sales(request):
             response.status_code = 400
             return response
         try:
-            automobile = AutomobileVO.objects.get(id=content["automobile"])
-            content["automobile"] = automobile
+            # checks the Automobile VO's by VIN
+            # posts "automobile" as expected by model with value of vin
+            vin = AutomobileVO.objects.get(vin=content["automobile"])
+            content["automobile"] = vin
         except AutomobileVO.DoesNotExist:
             response = JsonResponse(
                 {"message": "Automobile does not exist"}

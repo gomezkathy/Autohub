@@ -70,7 +70,7 @@ function AddSaleForm({getSales, salespeople, customers, autos}) {
                 <option value="">Choose an automobile VIN...</option>
                 {autos.map(automobile => {
                   return (
-                    <option key={automobile.id} value={automobile.id}>
+                    <option key={automobile.id} value={automobile.vin}>
                       {automobile.vin}
                     </option>
                   )
