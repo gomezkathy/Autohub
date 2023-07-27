@@ -1,19 +1,20 @@
 import React, { useState } from 'react';
 
-function AddModelForm({getModels, manufacturers}) {
-    const [hasAddedModel, setHasAddedModel] = useState(false);
+function AddAutomobileForm({getAutomobiles, models}) {
+    const [hasAddedAutomobile, setHasAddedAutomobile] = useState(false);
     
     //Condense all form data into one state object
     const [formData, setFormData] = useState({
-        name: '',
-        picture_url:'',
-        manufacturer_id: '',
+        color: '',
+        year:'',
+        vin:'',
+        model_id: '',
     })
 
     const handleSubmit = async (event) => {
         console.log(formData);
         event.preventDefault();
-        const url = 'http://localhost:8100/api/models/';
+        const url = 'http://localhost:8100/api/automobiles/';
         const fetchConfig = {
             method: "post",
             //By using one formData state object,
@@ -29,12 +30,13 @@ function AddModelForm({getModels, manufacturers}) {
         if (response.ok) {
             //The single formData object allows for easier clearing of data
             setFormData({
-                name: '',
-                picture_url:'',
-                manufacturer_id: '',
+                color: '',
+                year:'',
+                vin:'',
+                model_id: '',
             });
-            setHasAddedModel(true);
-            getModels();
+            setHasAddedAutomobile(true);
+            getAutomobiles();
         }
     }
     
@@ -51,7 +53,7 @@ function AddModelForm({getModels, manufacturers}) {
 
     let messageClasses = 'alert alert-success d-none mb-0';
     let formClasses = '';
-    if (hasAddedModel) {
+    if (hasAddedAutomobile) {
       messageClasses = 'alert alert-success mb-0';
       formClasses = 'd-none';
     }
@@ -63,22 +65,27 @@ function AddModelForm({getModels, manufacturers}) {
           <h1>Create a vehicle model</h1>
           <form className={formClasses} onSubmit={handleSubmit} id="create-model-form">
             <div className="form-floating mb-3">
-              <input onChange={handleFormChange} placeholder="Model Name" required type="text" 
-                name="name" id="name" className="form-control" />
-              <label htmlFor="name">Model name...</label>
+              <input onChange={handleFormChange} placeholder="Color" required type="text" 
+                name="color" id="color" className="form-control" />
+              <label htmlFor="color">Color...</label>
             </div>
             <div className="form-floating mb-3">
-              <input onChange={handleFormChange} placeholder="Picture URL" required type="text" 
-                name="picture_url" id="picture_url" className="form-control" />
-              <label htmlFor="picture_url">Picture URL...</label>
+              <input onChange={handleFormChange} placeholder="Year" required type="text" 
+                name="year" id="year" className="form-control" />
+              <label htmlFor="year">Year...</label>
+            </div>
+            <div className="form-floating mb-3">
+              <input onChange={handleFormChange} placeholder="VIN" required type="text" 
+                name="vin" id="vin" className="form-control" />
+              <label htmlFor="vin">VIN...</label>
             </div>
             <div className="mb-3">
-              <select onChange={handleFormChange} required name="manufacturer_id" id="manufacturer_id" className="form-select">
-                <option value="">Choose a manufacturer</option>
-                {manufacturers.map(manufacturer => {
+              <select onChange={handleFormChange} required name="model_id" id="model_id" className="form-select">
+                <option value="">Choose a model...</option>
+                {models.map(model => {
                   return (
-                    <option key={manufacturer.id} value={manufacturer.id}>
-                      {manufacturer.name}
+                    <option key={model.id} value={model.id}>
+                      {model.name}
                     </option>
                   )
                 })}
@@ -87,7 +94,7 @@ function AddModelForm({getModels, manufacturers}) {
             <button className="btn btn-primary">Create</button>
           </form>
           <div className={messageClasses} id="success-message">
-            Model is Added!
+            Automobile is Added!
           </div>
         </div>
       </div>
@@ -95,4 +102,4 @@ function AddModelForm({getModels, manufacturers}) {
   );
 }
 
-export default AddModelForm;
+export default AddAutomobileForm;
