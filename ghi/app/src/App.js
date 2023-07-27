@@ -14,6 +14,7 @@ import CustomersList from './CustomersList';
 import TechnicianForm from './TechnicianForm';
 import AddCustomerForm from './CustomerForm';
 import TechnicianList from './TechnicianList';
+import AppointmentForm from './AppointmentForm';
 
 
 function App(props) {
@@ -110,6 +111,9 @@ function App(props) {
           <Route path="technicians">
             <Route index element={<TechnicianList technicians={props.technicians} />} />
             <Route path="new" element={<TechnicianForm />} />
+          </Route>
+          <Route path="appointments">
+            <Route path="new" element={<AppointmentForm />} />
           </Route>
           <Route path="manufacturers">
             <Route index element={<ManufacturersList manufacturers={manufacturers} getManufacturers={getManufacturers}/>} />
