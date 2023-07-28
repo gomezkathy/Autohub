@@ -1,5 +1,25 @@
+import React, { useState, useEffect } from 'react';
+
 
 function AppointmentList(props){
+
+    const [auto, setAuto] = useState([]);
+
+    async function getAutoData(){
+        const response = await fetch('http://localhost:8100/api/automobiles/');
+        if(response.ok){
+            const data = await response.json();
+            setAuto(data.autos);
+        }
+    }
+
+    useEffect(() => {
+        getAutoData();
+    })
+
+    function isVip(vin) {
+        return auto.some((item)=> item.vin ===vin);
+    }
 
     async function handleAppointmentCancel(appt_id) {
         const apptUrl =`http://localhost:8080/api/appointments/${appt_id}/cancel`;
@@ -60,7 +80,7 @@ function AppointmentList(props){
                     return(
                         <tr key={appointment.id}>
                             <td>{ appointment.vin }</td>
-                            <td></td>
+                            <td>{ isVip(appointment.vin) ? 'Yes': 'No'}</td>
                             <td>{ appointment.customer_name}</td>
                             <td>{new Date(appointment.date_time).toLocaleDateString()}</td>
                             <td>{new Date(appointment.date_time).toLocaleTimeString()}</td>
