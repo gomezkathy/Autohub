@@ -31,7 +31,12 @@ function ServiceHistory(props, appointments) {
     }, []);
 
     function isVip(vin) {
-        return auto.some((item) => item.vin === vin);
+        for (let i = 0; i < auto.length; i++) {
+            if (auto[i].vin === vin) {
+                return true;
+            }
+        }
+        return false;
     }
 
     if (props.appointments === undefined) {
