@@ -19,6 +19,7 @@ import AppointmentList from './AppointmentList';
 import ServiceHistory from './ServiceHistory';
 
 
+
 function App(props) {
 
   const [ manufacturers, setManufacturers ] = useState([]);
@@ -28,6 +29,17 @@ function App(props) {
   const [ customers, setCustomers ] = useState([]);
   const [ sales, setSales ] = useState([]);
   const [ appointments, setAppointments] = useState([]);
+  const [ inventory, setInventory ] = useState([]);
+
+  async function getInventory() {
+      const response = await fetch('http://localhost:8100/api/automobiles/');
+      if (response.ok) {
+        const { inventory } = await response.json();
+        setInventory(inventory);
+      } else {
+      console.error('could not get inventory data');
+    }
+  }
 
   async function getAppointments() {
     const response = await fetch('http://localhost:8080/api/appointments/');
@@ -109,6 +121,8 @@ function App(props) {
     getCustomers();
     getSales();
     getAppointments();
+    getInventory();
+
 
   }, [])
   if (props.technicians === undefined) {
@@ -126,9 +140,9 @@ function App(props) {
             <Route path="new" element={<TechnicianForm />} />
           </Route>
           <Route path="appointments">
-            <Route index element={<AppointmentList appointments={appointments} />} />
+            <Route index element={<AppointmentList inventory={inventory} appointments={appointments} />} />
             <Route path="new" element={<AppointmentForm />} />
-            <Route path="history" element={<ServiceHistory />} />
+            <Route path="history" element={<ServiceHistory appointments={appointments}/>} />
           </Route>
           <Route path="manufacturers">
             <Route index element={<ManufacturersList manufacturers={manufacturers} getManufacturers={getManufacturers}/>} />

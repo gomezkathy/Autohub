@@ -1,4 +1,6 @@
+
 function AppointmentList(props){
+
     async function handleAppointmentCancel(appt_id) {
         const apptUrl =`http://localhost:8080/api/appointments/${appt_id}/cancel`;
         const fetchConfig = {
@@ -10,7 +12,7 @@ function AppointmentList(props){
 
         const response = await fetch(apptUrl, fetchConfig);
         if (response.ok) {
-          console.log("cancelled");
+
           window.location.reload();
         }
     }
@@ -26,7 +28,7 @@ function AppointmentList(props){
 
         const response = await fetch(apptUrl, fetchConfig);
         if (response.ok) {
-          console.log("finished");
+
           window.location.reload();
         }
     }
@@ -36,6 +38,7 @@ function AppointmentList(props){
     if (props.appointments === undefined){
         return null;
     }
+
     return(
         <div>
             <h2>Service Appointments</h2>
@@ -53,14 +56,15 @@ function AppointmentList(props){
             </thead>
             <tbody>
                 {props.appointments.map(appointment =>{
+
                     return(
                         <tr key={appointment.id}>
                             <td>{ appointment.vin }</td>
-                            <td>{ appointment.vip }</td>
+                            <td></td>
                             <td>{ appointment.customer_name}</td>
-                            <td>{ appointment.date }</td>
-                            <td>{ appointment.date }</td>
-                            <td>{ appointment.technicians }</td>
+                            <td>{new Date(appointment.date_time).toLocaleDateString()}</td>
+                            <td>{new Date(appointment.date_time).toLocaleTimeString()}</td>
+                            <td>{appointment.technician}</td>
                             <td>{ appointment.reason }</td>
                             <td>
                             <button onClick={() => handleAppointmentCancel(appointment.id)} className="btn btn-danger">Cancel</button>
