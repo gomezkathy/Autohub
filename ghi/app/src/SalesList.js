@@ -12,8 +12,8 @@ function SalesList(props) {
 
         //toggles automobile sold status to false when sale is deleted
         const updateAutoURL = `http://localhost:8100/api/automobiles/${autoVIN}/`;
-        const fetchUpdateConfig = { 
-            method: "PUT", 
+        const fetchUpdateConfig = {
+            method: "PUT",
             body: JSON.stringify({"sold": false}),
             headers: {'Content-Type': 'application/json',},
         };
@@ -24,8 +24,8 @@ function SalesList(props) {
             props.getAutomobiles();
         }
     }
-    
-    
+
+
     const [formData, setFormData] = useState({
         salesperson: '',
     })
@@ -67,7 +67,7 @@ function SalesList(props) {
                     </tr>
                 </thead>
                 <tbody>
-                    {props.sales.map(sale => { 
+                    {props.sales.map(sale => {
                         return (
                             <tr key={sale.id}>
                                 <td>{sale.salesperson.employee_id}</td>
