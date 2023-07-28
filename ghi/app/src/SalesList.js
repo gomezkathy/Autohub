@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import React, { useState } from 'react';
 
 
-function SalesList(props) {
+function SalesList(props, sales) {
 
     async function deleteSale(saleID, autoVIN) {
         //deletes the sale item
@@ -25,27 +25,34 @@ function SalesList(props) {
         }
     }
     
-    
-    const [formData, setFormData] = useState({
-        salesperson: '',
-    })
-    // NOTE: change this to a specific event handler, and use a filter in front of sales map
-    const handleFormChange = (e) => {
-        const value = e.target.value;
-        const inputName = e.target.name;
-        setFormData({
-            //Spread/Copy previous form data into the new state object
-            ...formData,
-            //Then add the currently engaged input key and value
-            [inputName]: value
-        });
-        // console.log(formData);
+
+    let [filteredSales, setFilteredSales] = useState([]);
+    let [selectedSalesman, setSelectedSalesman] = useState('');
+
+    const handleSalesmanSelection = (event) => {
+        selectedSalesman = event.target.value;
+        setSelectedSalesman(selectedSalesman);
+    }
+
+    const filterTheSales = (event) => {
+        event.preventDefault();
+        filteredSales = props.sales.filter(
+            sale => String(sale.salesperson.id) === selectedSalesman
+        );
+        setFilteredSales(filteredSales);
+    }
+
+    if (filteredSales.length>0){
+        sales = filteredSales;
+    } else {
+        sales = props.sales;
     }
 
     if (props.sales === undefined) { return null }
     return (
         <>
-            <select onChange={handleFormChange} required name="salesperson" id="salesperson" className="form-select">
+            <form onSubmit={filterTheSales}>
+            <select onChange={handleSalesmanSelection} required name="salesperson" id="salesperson" className="form-select">
                 <option value="">View sales of one salesperson...</option>
                 {props.salespeople.map(salesperson => {
                   return (
@@ -55,6 +62,8 @@ function SalesList(props) {
                   )
                 })}
             </select>
+                <button type="submit">Get Sales History</button>
+            </form>
             <table className="table table-striped">
                 <thead className="table-primary">
                     <tr>
@@ -67,7 +76,7 @@ function SalesList(props) {
                     </tr>
                 </thead>
                 <tbody>
-                    {props.sales.map(sale => { 
+                    {sales.map(sale => { 
                         return (
                             <tr key={sale.id}>
                                 <td>{sale.salesperson.employee_id}</td>

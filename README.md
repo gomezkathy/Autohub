@@ -40,7 +40,7 @@ docker-compose up
 ​
 | Feature          | URL          |
 |:-----------------|:-------------|
-|List automobiles| http://localhost:3000/automobiles/all|
+|List automobiles| http://localhost:3000/automobiles/|
 |Create automobiles| http://localhost:3000/automobiles/create|
 ​
 #### Manufacturers:
