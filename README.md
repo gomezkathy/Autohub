@@ -12,7 +12,7 @@ Team:
 1. Fork this repository
 
 2. Clone the forked repository onto your local computer:
-git clone http://gitlab.com/<your fork>/project-beta
+git clone https://gitlab.com/Megalanuth/project-beta.git
 
 3. Build and run the project using Docker with these commands:
 ```
@@ -49,7 +49,7 @@ It starts with the Inventory domain, keeping records of automobiles that are ava
 | Action                         | Method | URL
 | ------------------------------ | ------ | ----------- |
 | List manufacturers             | GET    | http://localhost:8100/api/manufacturers/
-| Create a manufacturer          | POST   | http://localhost:8100/api/manufacturers/ 
+| Create a manufacturer          | POST   | http://localhost:8100/api/manufacturers/
 | Get a specific manufacturer    | GET    | http://localhost:8100/api/manufacturers/id/
 | Update a specific manufacturer | PUT    | http://localhost:8100/api/manufacturers/id/
 | Delete a specific manufacturer | DELETE | http://localhost:8100/api/manufacturers/id/
@@ -455,5 +455,64 @@ Return Value of Creating a New Sale:
 ```
 ## Service microservice
 
-Explain your models and integration with the inventory
-microservice, here.
+The backend of the service microservice includes includes 3 models: Technnician, AutomobileVO, and Appointment. The Appoinment model interacts with the Technician model through it's foreign key and the Appointment model interacts with the AutomobileVO model through its vin. A poller was created to automatically poll for inventory microservice data to be created for the services microservice.
+
+The reason for integration between these two microservices is that when an automobile is purchased, the vin is recorded to qualify for VIP services when creating an appointment.
+
+
+## Services Microservice RESTful API calls:
+
+### Technicians:
+
+| Action              | Method | URL
+| ------------------- | ------ | ----------- |
+| List technicians    | GET    | http://localhost:8080/api/technicians/
+| Technician details  | GET    | http://localhost:8080/api/technicians/<int:pk>/
+| Create a technician | POST   | http://localhost:8080/api/technicians/
+| Delete a technician | DELETE | http://localhost:8080/api/technicians/<int:pk>/
+
+LIST TECHNICIANS: Following this endpoint will give you a list of all technicians that are currently employed.
+Since this is a GET request, you do not need to provide any data.
+```
+Example:
+{
+	"technicians": [
+		{
+			"first_name": "sunny",
+			"last_name": "medina",
+			"employee_id": "777",
+			"id": 2
+		},
+	]
+}
+```
+
+TECHNICIAN DETAIL: This is a GET request, so no data will need to be provided. From the list of technicians currently employeed, you will see each is assigned an "id" value. This will be used in place of "<int:pk>". For example in order to view the details for the technician "sunny", the following address would be input:
+http://localhost:8080/api/technicians/2/.
+The output would be the following:
+
+```
+{
+	"first_name": "sunny",
+	"last_name": "medina",
+	"employee_id": "777",
+	"id": 2
+}
+```
+
+CREATE A TECHNICIAN: This is a POST request. To create a technician send this JSON body:
+- NOTE: The "id" field will automatically be populated for you.
+```
+{
+	"first_name": "michael",
+	"last_name": "meyers",
+	"employee_id": "1243"
+}
+```
+
+DELETE A TECHNICIAN: This is a DELETE request. To delete a technician, from the list of technicians, input the "id" value of the technician you wish to be deleted in place of "<int:pk>". For example in order to delete our technician "sunny" you would input: http://localhost:8080/api/technicians/2/. The output would be the following:
+```
+{
+	"message": "technician has been deleted"
+}
+```
