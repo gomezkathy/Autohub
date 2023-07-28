@@ -31,6 +31,9 @@ class AppointmentEncoder(ModelEncoder):
         "technician",
         "id",
     ]
+    encoders={
+        "technician": TechnicianEncoder()
+    }
     def get_extra_data(self, o):
         return {
             "technician": o.technician.id
@@ -52,18 +55,18 @@ class AutomobileVOEncoder(ModelEncoder):
 @require_http_methods(["GET", "POST"])
 def api_technician_list(request):
     if request.method == "GET":
-        technician = Technician.objects.all()
+        technicians = Technician.objects.all()
         return JsonResponse(
-            {"technician": technician},
+            {"technicians": technicians},
             encoder = TechnicianEncoder,
             safe=False,
         )
     else:
         try:
             content = json.loads(request.body)
-            technician = Technician.objects.create(**content)
+            technicians = Technician.objects.create(**content)
             return JsonResponse(
-                technician,
+                technicians,
                 encoder=TechnicianEncoder,
                 safe=False,
             )
@@ -78,9 +81,9 @@ def api_technician_list(request):
 def api_technician_detail(request,pk):
     if request.method == "GET":
         try:
-            technician = Technician.objects.get(id=pk)
+            technicians = Technician.objects.get(id=pk)
             return JsonResponse(
-                technician,
+                technicians,
                 encoder=TechnicianEncoder,
                 safe=False,
             )
@@ -94,10 +97,10 @@ def api_technician_detail(request,pk):
             return response
     elif request.method == "DELETE":
         try:
-            technician = Technician.objects.get(id=pk)
-            technician.delete()
+            technicians = Technician.objects.get(id=pk)
+            technicians.delete()
             return JsonResponse(
-                technician,
+                technicians,
                 encoder=TechnicianEncoder,
                 safe=False,
             )
@@ -109,7 +112,7 @@ def api_technician_detail(request,pk):
     else:
         try:
             content = json.loads(request.body)
-            technician = Technician.objects.get(id=pk)
+            technicians = Technician.objects.get(id=pk)
             properties = [
                 "first_name",
                 "last_name",
@@ -118,10 +121,10 @@ def api_technician_detail(request,pk):
 
             for prop in properties:
                 if prop in content:
-                    setattr(technician, prop, content[prop])
-            technician.save()
+                    setattr(technicians, prop, content[prop])
+            technicians.save()
             return JsonResponse(
-                technician,
+                technicians,
                 encoder= TechnicianEncoder,
                 safe=False,
             )
@@ -151,8 +154,8 @@ def api_appointment_list(request, technician_id=None):
 
         try:
             technician_href = content["technician"]
-            technician=Technician.objects.get(id=technician_href)
-            content["technician"]=technician
+            technicians=Technician.objects.get(id=technician_href)
+            content["technician"]=technicians
         except Technician.DoesNotExist:
             return JsonResponse(
                 {"message": "technician id is invalid"},

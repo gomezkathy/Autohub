@@ -15,9 +15,14 @@ import AddSaleForm from './SaleForm';
 import CustomersList from './CustomersList';
 import TechnicianForm from './TechnicianForm';
 import AddCustomerForm from './CustomerForm';
+import TechnicianList from './TechnicianList';
+import AppointmentForm from './AppointmentForm';
+import AppointmentList from './AppointmentList';
+import ServiceHistory from './ServiceHistory';
 
 
-function App() {
+
+function App(props) {
 
   const [ manufacturers, setManufacturers ] = useState([]);
   const [ models, setModels ] = useState([]);
@@ -25,8 +30,28 @@ function App() {
   const [ salespeople, setSalespeople ] = useState([]);
   const [ customers, setCustomers ] = useState([]);
   const [ sales, setSales ] = useState([]);
+  const [ appointments, setAppointments] = useState([]);
+  const [ inventory, setInventory ] = useState([]);
 
+  async function getInventory() {
+      const response = await fetch('http://localhost:8100/api/automobiles/');
+      if (response.ok) {
+        const { inventory } = await response.json();
+        setInventory(inventory);
+      } else {
+      console.error('could not get inventory data');
+    }
+  }
 
+  async function getAppointments() {
+    const response = await fetch('http://localhost:8080/api/appointments/');
+    if (response.ok) {
+      const { appointments } = await response.json();
+      setAppointments(appointments);
+    } else {
+      console.error('could not get appointment data');
+    }
+  }
 
   async function getManufacturers() {
     const response = await fetch('http://localhost:8100/api/manufacturers/')
@@ -97,8 +122,14 @@ function App() {
     getSalespeople();
     getCustomers();
     getSales();
+    getAppointments();
+    getInventory();
+
 
   }, [])
+  if (props.technicians === undefined) {
+    return null;
+  }
 
   return (
     <BrowserRouter>
@@ -106,7 +137,15 @@ function App() {
       <div className="container">
         <Routes>
           <Route path="/" element={<MainPage />} />
-          <Route path='/technicians/new' element={<TechnicianForm />}></Route>
+          <Route path="technicians">
+            <Route index element={<TechnicianList technicians={props.technicians} />} />
+            <Route path="new" element={<TechnicianForm />} />
+          </Route>
+          <Route path="appointments">
+            <Route index element={<AppointmentList inventory={inventory} appointments={appointments} />} />
+            <Route path="new" element={<AppointmentForm />} />
+            <Route path="history" element={<ServiceHistory appointments={appointments}/>} />
+          </Route>
           <Route path="manufacturers">
             <Route index element={<ManufacturersList manufacturers={manufacturers} getManufacturers={getManufacturers}/>} />
             <Route path="create" element={<AddManufacturerForm getManufacturers={getManufacturers}/>} />
