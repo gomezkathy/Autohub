@@ -21,7 +21,9 @@ function AddSaleForm(props) {
         }
         const response2 = await fetch(updateAutoSoldURL, fetchUpdateConfig);
         if (response2.ok) {
-            // getAutomobiles();
+            // props.getAutomobiles();
+            function changepage(){window.location.href = 'http://localhost:3000/automobiles/';};
+            setTimeout(changepage, 3000);
         }
     }
 
@@ -126,7 +128,7 @@ function AddSaleForm(props) {
             <button className="btn btn-primary">Create</button>
           </form>
           <div className={messageClasses} id="success-message">
-            Sale is Added!
+            Sale is Added! Redirecting to Auto inventory...
           </div>
         </div>
       </div>
