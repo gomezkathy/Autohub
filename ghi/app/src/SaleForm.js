@@ -20,13 +20,13 @@ function AddSaleForm(props) {
             headers: {'Content-Type': 'application/json',},
         }
         const response2 = await fetch(updateAutoSoldURL, fetchUpdateConfig);
-        // if (response2.ok) {
-        //     getAutomobiles();
-        // }
+        if (response2.ok) {
+            // getAutomobiles();
+        }
     }
 
     const handleSubmit = async (event) => {
-        console.log(formData);
+        // console.log(formData);
         event.preventDefault();
         const url = 'http://localhost:8090/api/sales/';
         const fetchConfig = {
@@ -103,7 +103,7 @@ function AddSaleForm(props) {
                       {salesperson.first_name} {salesperson.last_name}
                     </option>
                   )
-                })}
+                  })}
               </select>
             </div>
             <div className="mb-3">

@@ -29,7 +29,7 @@ function SalesList(props) {
     const [formData, setFormData] = useState({
         salesperson: '',
     })
-    
+    // NOTE: change this to a specific event handler, and use a filter in front of sales map
     const handleFormChange = (e) => {
         const value = e.target.value;
         const inputName = e.target.name;
@@ -67,7 +67,7 @@ function SalesList(props) {
                     </tr>
                 </thead>
                 <tbody>
-                    {props.sales.map(sale => { {
+                    {props.sales.map(sale => { 
                         return (
                             <tr key={sale.id}>
                                 <td>{sale.salesperson.employee_id}</td>
@@ -77,7 +77,7 @@ function SalesList(props) {
                                 <td>{sale.price}</td>
                                 <td><button onClick={() => deleteSale(sale.id, sale.automobile.vin)}>Delete</button></td>
                             </tr>
-                        )}
+                        )
                     })}
                 </tbody>
             </table>
