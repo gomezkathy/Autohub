@@ -26,6 +26,52 @@ docker-compose up
 
 - View the project in the browser: http://localhost:3000/
 
+## Navigation with URLs
+* The server uses `http://localhost:3000` as the Home Page. When entering that into your browser, you will see a navigation bar. Below is a breakdown of each URL and what feature it links to:
+​
+#### Vehicle Models:
+​
+| Feature          | URL          |
+|:-----------------|:-------------|
+|List vehicle models|http://localhost:3000/models|
+|Create vehicle models| http://localhost:3000/models/create|
+​
+#### Automobiles:
+​
+| Feature          | URL          |
+|:-----------------|:-------------|
+|List automobiles| http://localhost:3000/automobiles/all|
+|Create automobiles| http://localhost:3000/automobiles/create|
+​
+#### Manufacturers:
+​
+| Feature          | URL          |
+|:-----------------|:-------------|
+|List manufactureres|http://localhost:3000/manufacturers|
+|Add a manufactureres|http://localhost:3000/manufacturers/create|
+​
+#### Service Microservice:
+​
+| Feature          | URL          |
+|:-----------------|:-------------|
+|List service appointments| http://localhost:3000/appointments|
+|Create service appointments| http://localhost:3000/appointments/new|
+|List service history based VIN| http://localhost:3000/appointments/history|
+|List of appointments | http://localhost:3000/appointments|
+|List of technicians | http://localhost:3000/technicians|
+​|Create technicians | http://localhost:3000/technicians/new|
+
+#### Sales Microservice:
+​
+| Feature          | URL          |
+|:-----------------|:-------------|
+|List of customers|http://localhost:3000/customers/|
+|Add a customer|http://localhost:3000/customers/create|
+|List of salespeople|http://localhost:3000/salespeople|
+|Add salesperson|http://http://localhost:3000/salespeople/create|
+|List Sales|http://localhost:3000/sales|
+|Add a sale|http://localhost:3000/sales/create|
+
 ## Design
 
 CarCar is made up of 3 microservices which interact with one another.
@@ -33,6 +79,10 @@ CarCar is made up of 3 microservices which interact with one another.
 - **Inventory**
 - **Services**
 - **Sales**
+
+* Below is a diagram of the project.
+![Img](diagram_image/projectBetaExcalidraw.png)
+
 
 ## Integration
 
@@ -481,7 +531,7 @@ Example:
 			"first_name": "sunny",
 			"last_name": "medina",
 			"employee_id": "777",
-			"id": 2
+			"id": 1
 		},
 	]
 }
@@ -496,7 +546,7 @@ The output would be the following:
 	"first_name": "sunny",
 	"last_name": "medina",
 	"employee_id": "777",
-	"id": 2
+	"id": 1
 }
 ```
 
@@ -510,9 +560,81 @@ CREATE A TECHNICIAN: This is a POST request. To create a technician send this JS
 }
 ```
 
-DELETE A TECHNICIAN: This is a DELETE request. To delete a technician, from the list of technicians, input the "id" value of the technician you wish to be deleted in place of "<int:pk>". For example in order to delete our technician "sunny" you would input: http://localhost:8080/api/technicians/2/. The output would be the following:
+DELETE A TECHNICIAN: This is a DELETE request. To delete a technician, from the list of technicians, input the "id" value of the technician you wish to be deleted in place of "<int:pk>". For example in order to delete our technician "sunny" you would input: http://localhost:8080/api/technicians/1/. The output would be the following:
 ```
 {
 	"message": "technician has been deleted"
 }
 ```
+
+### Appointments:
+| Action                | Method      | URL
+| --------------------- | ----------- | ----------- |
+| List of appointments  | GET    | http://localhost:8080/api/appointments/
+| Create an appointment | POST   | http://localhost:8080/api/appointments/
+| Delete an appointment | DELETE | http://localhost:8080/api/appointments/<int:pk>/
+| Cancel an appointment | PUT    | http://localhost:8080/api/appointments/<int:pk>/cancel
+| Finish an appointment | PUT    | http://localhost:8080/api/appointments/<int:pk>/finish
+
+LIST OF APPOINTMENTS: Following this endpoint will give you a list of all appointments. Since this is a GET request, you do not need to provide any data.
+```
+Example:
+{
+	"appointments": [
+		{
+			"date_time": "2023-07-25T10:00:00+00:00",
+			"reason": "flat tire",
+			"status": "finished",
+			"vin": "1010",
+			"customer_name": "Tom Nook",
+			"technician": 2,
+			"id": 1
+		},
+	]
+}
+```
+CREATE AN APPOINTMENT: This is a POST request. To schedule an appointment send this JSON body:
+-NOTE: When choosing a technician, an existing technician id must be used.
+```
+{
+  "date_time": "2023-07-25 10:00:00",
+  "reason": "oil change",
+  "status": "scheduled",
+  "vin": "12345678901234567",
+  "customer_name": "Tom Nook",
+	"technician": 2
+
+}
+```
+
+DELETE AN APPOINTMENT: This is a DELETE request. To delete an appointment, from the list of appointment, input the "id" of the appointment you wish to be deleted in the place of "<int:pk>". For example in order to delete the appointment for "Tom Nook" you would input: http://localhost:8080/api/appointments/1/. The output would be the following:
+```
+{
+	"message": "appointment has been deleted"
+}
+```
+
+CANCEL AN APPOINTMENT: This is a PUT request. To change the appointment status to canceled, from the appointment list, input the "id" of the appointment you wish to be cancelled in place of "<int:pk>". For example in order to cancel the appointment for "Tom Nook" you would input: http://localhost:8080/api/appointments/1/cancel. The output would be the following:
+
+```
+{
+	"date_time": "2023-07-25T10:00:00+00:00",
+	"reason": "oil change",
+	"status": "cancelled",
+	"vin": "12345678901234567",
+	"customer_name": "Tom Nook",
+	"technician": 2,
+	"id": 1
+}
+
+FINISH AN APPOINTMENT: This is a PUT request. To change the appointment status to finished, from the appointment list, input the "id" of the appointment you wish to be cancelled in place of "<int:pk>". For example in order to finish the appointment for "Tom Nook" you would input: http://localhost:8080/api/appointments/1/finish. The output would be the following:
+```
+{
+	"date_time": "2023-07-25T10:00:00+00:00",
+	"reason": "oil change",
+	"status": "finished",
+	"vin": "12345678901234567",
+	"customer_name": "Tom Nook",
+	"technician": 2,
+	"id": 1
+}
